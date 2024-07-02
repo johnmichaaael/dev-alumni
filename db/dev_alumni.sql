@@ -29,9 +29,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `alumni` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `salary` int(10) NOT NULL
+  `last_name` varchar(100) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `middle_name` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
