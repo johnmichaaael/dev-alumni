@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 02, 2024 at 03:53 AM
+-- Generation Time: Jul 02, 2024 at 07:57 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,6 +20,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `dev_alumni`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `alumni`
+--
+
+CREATE TABLE `alumni` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `salary` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -46,6 +59,12 @@ INSERT INTO `users` (`id`, `username`, `password`, `created_at`) VALUES
 --
 
 --
+-- Indexes for table `alumni`
+--
+ALTER TABLE `alumni`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -55,6 +74,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `alumni`
+--
+ALTER TABLE `alumni`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
