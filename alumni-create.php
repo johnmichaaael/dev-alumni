@@ -11,8 +11,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate last name
     $input_last_name = trim($_POST["last_name"]);
     if(empty($input_last_name)){
-        $last_name_err = "Please enter a last name.";
-    } elseif(!preg_match("/^[a-zA-Z\s]+$/", $input_last_name)){
+        $name_err = "Please enter a last name.";
+    } elseif(!filter_var($input_last_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
         $last_name_err = "Please enter a valid name.";
     } else{
         $last_name = $input_last_name;
@@ -22,15 +22,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $input_first_name = trim($_POST["first_name"]);
     if(empty($input_first_name)){
         $first_name_err = "Please enter a first name.";
-    } elseif(!preg_match("/^[a-zA-Z\s]+$/", $input_first_name)){
+    } elseif(!filter_var($input_first_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
         $first_name_err = "Please enter a valid name.";
+
     } else{
         $first_name = $input_first_name;
     }
 
-    // Validate middle name (optional)
-    $input_middle_name = trim($_POST["middle_name"]); // Corrected here
-    if(!empty($input_middle_name) &&!preg_match("/^[a-zA-Z\s]+$/", $input_middle_name)){
+    // Validate middle name
+    $input_middle_name = trim($_POST["middle_name"]);
+    if(empty($input_middle_name)){
+        $middle_name_err = "Please enter a middle name.";
+    } elseif(!filter_var($input_middle_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
         $middle_name_err = "Please enter a valid name.";
     } else{
         $middle_name = $input_middle_name;
@@ -79,8 +82,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Attempt to execute the prepared statement
             if($stmt->execute()){
                 // Records created successfully. Redirect to landing page
-                header("location: alumni-list.php");
-                exit();
+                //header("location: alumni-list.php");
+                //exit();
+                $last_name = $first_name = $middle_name = $email = $password = "Nasulod na imo gibutang";
             } else{
                 echo "Oops Something went wrong. Please try again later.";
             }
@@ -133,13 +137,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                         <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                            <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                             <span class="invalid-feedback"><?php echo $email_err;?></span>
                          </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" id="exampleInputPassword1" placeholder="Password">
+                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" id="exampleInputPassword1" placeholder="Password">
                             <span class="invalid-feedback"><?php echo $password_err;?></span>
                         </div>
 

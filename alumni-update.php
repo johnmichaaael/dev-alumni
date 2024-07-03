@@ -3,58 +3,85 @@
 require_once "./db/config.php";
  
 // Define variables and initialize with empty values
-$name = $address = $salary = "";
-$name_err = $address_err = $salary_err = "";
+$last_name = $first_name = $middle_name = $email = $password = "";
+$last_name_err = $first_name_err = $middle_name_err = $email_err = $password_err = "";
  
 // Processing form data when form is submitted
 if(isset($_POST["id"]) && !empty($_POST["id"])){
     // Get hidden input value
     $id = $_POST["id"];
     
-    // Validate name
-    $input_name = trim($_POST["name"]);
-    if(empty($input_name)){
-        $name_err = "Please enter a name.";
-    } elseif(!filter_var($input_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
-        $name_err = "Please enter a valid name.";
+    // Validate last name
+    $input_last_name = trim($_POST["last_name"]);
+    if(empty($input_last_name)){
+        $name_err = "Please enter a last name.";
+    } elseif(!filter_var($input_last_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+        $last_name_err = "Please enter a valid name.";
     } else{
-        $name = $input_name;
+        $last_name = $input_last_name;
     }
-    
-    // Validate address address
-    $input_address = trim($_POST["address"]);
-    if(empty($input_address)){
-        $address_err = "Please enter an address.";     
-    } else{
-        $address = $input_address;
-    }
-    
-    // Validate salary
-    $input_salary = trim($_POST["salary"]);
-    if(empty($input_salary)){
-        $salary_err = "Please enter the salary amount.";     
-    } elseif(!ctype_digit($input_salary)){
-        $salary_err = "Please enter a positive integer value.";
-    } else{
-        $salary = $input_salary;
-    }
+
+   // Validate first name
+   $input_first_name = trim($_POST["first_name"]);
+   if(empty($input_first_name)){
+       $first_name_err = "Please enter a first name.";
+   } elseif(!filter_var($input_first_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+       $first_name_err = "Please enter a valid name.";
+
+   } else{
+       $first_name = $input_first_name;
+   }
+
+   // Validate middle name
+   $input_middle_name = trim($_POST["middle_name"]);
+   if(empty($input_middle_name)){
+       $middle_name_err = "Please enter a middle name.";
+   } elseif(!filter_var($input_middle_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+       $middle_name_err = "Please enter a valid name.";
+   } else{
+       $middle_name = $input_middle_name;
+   }
+
+   // Validate email address
+   $input_email = trim($_POST["email"]); // Corrected here
+   if(empty($input_email)){
+       $email_err = "Please enter an email address.";
+   } elseif(!filter_var($input_email, FILTER_VALIDATE_EMAIL)){
+       $email_err = "Please enter a valid email address.";
+   } else{
+       $email = $input_email;
+   }
+
+   // Validate password
+   $input_password = trim($_POST["password"]); // Corrected here
+   if(empty($input_password)){
+       $password_err = "Please enter a password.";
+   } elseif(strlen($input_password) < 6){
+       $password_err = "Password must have at least 6 characters.";
+   } else{
+       $password = $input_password;
+   }
     
     // Check input errors before inserting in database
-    if(empty($name_err) && empty($address_err) && empty($salary_err)){
+    if(empty($last_name_err) && empty($first_name_err) && empty($param_middle_name_name_err) && empty($email_err) && empty($password_err)){
         // Prepare an update statement
-        $sql = "UPDATE employees SET name=:name, address=:address, salary=:salary WHERE id=:id";
+        $sql = "UPDATE alumni SET last_name=:last_name, first_name=:first_name, middle_name=:middle_name, email=:email, password=:password WHERE id=:id";
  
         if($stmt = $pdo->prepare($sql)){
             // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":name", $param_name);
-            $stmt->bindParam(":address", $param_address);
-            $stmt->bindParam(":salary", $param_salary);
+            $stmt->bindParam(":last_name", $param_last_name);
+            $stmt->bindParam(":first_name", $param_first_name);
+            $stmt->bindParam(":middle_name", $param_middle_name);
+            $stmt->bindParam(":email", $param_email);
+            $stmt->bindParam(":password", $param_password);
             $stmt->bindParam(":id", $param_id);
             
             // Set parameters
-            $param_name = $name;
-            $param_address = $address;
-            $param_salary = $salary;
+            $param_last_name = $last_name;
+            $param_first_name = $first_name;
+            $param_middle_name = $middle_name;
+            $param_email = $email;
+            $param_password = $password;
             $param_id = $id;
             
             // Attempt to execute the prepared statement
@@ -80,7 +107,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         $id =  trim($_GET["id"]);
         
         // Prepare a select statement
-        $sql = "SELECT * FROM employees WHERE id = :id";
+        $sql = "SELECT * FROM alumni WHERE id = :id";
         if($stmt = $pdo->prepare($sql)){
             // Bind variables to the prepared statement as parameters
             $stmt->bindParam(":id", $param_id);
@@ -96,9 +123,11 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                     $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 
                     // Retrieve individual field value
-                    $name = $row["name"];
-                    $address = $row["address"];
-                    $salary = $row["salary"];
+                    $last_name = $row["last_name"];
+                    $first_name = $row["first_name"];
+                    $middle_name = $row["middle_name"];
+                    $email = $row["email"];
+                    $password = $row["password"];
                 } else{
                     // URL doesn't contain valid id. Redirect to error page
                     header("location: error.php");
@@ -145,20 +174,42 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                     <p>Please edit the input values and submit to update the employee record.</p>
                     <form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="post">
                         <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
-                            <span class="invalid-feedback"><?php echo $name_err;?></span>
+                            <label>Last name</label>
+                            <input type="text" name="last_name" class="form-control <?php echo (!empty($last_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $last_name; ?>">
+                            <span class="invalid-feedback"><?php echo $last_name_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Address</label>
-                            <textarea name="address" class="form-control <?php echo (!empty($address_err)) ? 'is-invalid' : ''; ?>"><?php echo $address; ?></textarea>
-                            <span class="invalid-feedback"><?php echo $address_err;?></span>
+                            <label>Last name</label>
+                            <input type="text" name="last_name" class="form-control <?php echo (!empty($last_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $last_name; ?>">
+                            <span class="invalid-feedback"><?php echo $last_name_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Salary</label>
-                            <input type="text" name="salary" class="form-control <?php echo (!empty($salary_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $salary; ?>">
-                            <span class="invalid-feedback"><?php echo $salary_err;?></span>
+                            <label>Last name</label>
+                            <input type="text" name="last_name" class="form-control <?php echo (!empty($last_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $last_name; ?>">
+                            <span class="invalid-feedback"><?php echo $last_name_err;?></span>
                         </div>
+                        <div class="form-group">
+                            <label>First name</label>
+                            <input type="text" name="first_name" class="form-control <?php echo (!empty($first_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $first_name; ?>">
+                            <span class="invalid-feedback"><?php echo $first_name_err;?></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Middle name</label>
+                            <input type="text" name="middle_name" class="form-control <?php echo (!empty($middle_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $middle_name; ?>">
+                            <span class="invalid-feedback"><?php echo $middle_name_err;?></span>
+                        </div>
+                        <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                            <span class="invalid-feedback"><?php echo $email_err;?></span>
+                         </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" id="exampleInputPassword1" placeholder="Password">
+                            <span class="invalid-feedback"><?php echo $password_err;?></span>
+                        </div>
+
                         <input type="hidden" name="id" value="<?php echo $id; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a href="alumni-list.php" class="btn btn-secondary ml-2">Cancel</a>

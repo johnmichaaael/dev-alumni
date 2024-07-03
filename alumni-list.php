@@ -12,6 +12,7 @@
         .wrapper{
             width: 600px;
             margin: 0 auto;
+            
         }
         table tr td:last-child{
             width: 120px;
@@ -68,7 +69,7 @@
 
 <body>
     <div class="wrapper">
-        <div class="container-fluid">
+        <div class="container-fluid" style="margin-top:2rem;">
             <div class="row">
                 <div class="col-md-12">
                     <div class="mt-5 mb-3 clearfix">
