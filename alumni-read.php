@@ -5,7 +5,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     require_once "./db/config.php";
     
     // Prepare a select statement
-    $sql = "SELECT * FROM employees WHERE id = :id";
+    $sql = "SELECT * FROM alumni WHERE id = :id";
     
     if($stmt = $pdo->prepare($sql)){
         // Bind variables to the prepared statement as parameters
@@ -22,9 +22,11 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 
                 // Retrieve individual field value
-                $name = $row["name"];
-                $address = $row["address"];
-                $salary = $row["salary"];
+                $last_name = $row["last_name"];
+                $first_name = $row["first_name"];
+                $middle_name = $row["middle_name"];
+                $email = $row["email"];
+
             } else{
                 // URL doesn't contain valid id parameter. Redirect to error page
                 header("location: error.php");
@@ -68,16 +70,20 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 <div class="col-md-12">
                     <h1 class="mt-5 mb-3">View Record</h1>
                     <div class="form-group">
-                        <label>Name</label>
-                        <p><b><?php echo $row["name"]; ?></b></p>
+                        <label>Last Name</label>
+                        <p><b><?php echo $row["last_name"]; ?></b></p>
                     </div>
                     <div class="form-group">
-                        <label>Address</label>
-                        <p><b><?php echo $row["address"]; ?></b></p>
+                        <label>First Name</label>
+                        <p><b><?php echo $row["first_name"]; ?></b></p>
                     </div>
                     <div class="form-group">
-                        <label>Salary</label>
-                        <p><b><?php echo $row["salary"]; ?></b></p>
+                        <label>Middle Name</label>
+                        <p><b><?php echo $row["middle_name"]; ?></b></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <p><b><?php echo $row["email"]; ?></b></p>
                     </div>
                     <p><a href="alumni-list.php" class="btn btn-primary">Back</a></p>
                 </div>

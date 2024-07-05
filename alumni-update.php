@@ -206,7 +206,12 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                          </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Password</label>
-                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" id="exampleInputPassword1" placeholder="Password">
+                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="exampleInputPassword1" placeholder="Password">
+                            <span class="invalid-feedback"><?php echo $password_err;?></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Confirm Password</label>
+                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="exampleInputPassword1" placeholder="Enter password again">
                             <span class="invalid-feedback"><?php echo $password_err;?></span>
                         </div>
 
