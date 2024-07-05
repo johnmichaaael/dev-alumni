@@ -7,8 +7,8 @@ $form_submitted = false;
 $duplicate_record = false;
 
 // Define variables and initialize with empty values
-$last_name = $first_name = $middle_name = $email = $password = "";
-$last_name_err = $first_name_err = $middle_name_err = $email_err = $password_err = "";
+$last_name = $first_name = $middle_name = $email = $password = $confirm_password"";
+$last_name_err = $first_name_err = $middle_name_err = $email_err = $password_err = $confirm_password_err "";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -63,10 +63,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $password = $input_password;
     }
 
+    // Validate confirm password
+    if(empty(trim($_POST["confirm_password"]))){
+        $confirm_password_err = "Please confirm password.";     
+    } else{
+        $confirm_password = trim($_POST["confirm_password"]);
+        if(empty($password_err) && ($password != $confirm_password)){
+            $confirm_password_err = "Password did not match.";
+        }
+    }
+
     // Check input errors before inserting in database
     if(empty($last_name_err) && empty($first_name_err) && empty($middle_name_err) && empty($email_err) && empty($password_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO alumni (last_name, first_name, middle_name, email, password) VALUES (:last_name, :first_name, :middle_name, :email, :password)";
+        $sql = "INSERT INTO alumni (last_name, first_name, middle_name, email, password,) VALUES (:last_name, :first_name, :middle_name, :email, :password)";
         
         // Check if the record already exists
         $sql = "SELECT COUNT(*) FROM alumni WHERE last_name =:last_name AND first_name =:first_name AND middle_name =:middle_name AND email=:email";
