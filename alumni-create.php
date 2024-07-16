@@ -50,7 +50,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } elseif(!filter_var($input_email, FILTER_VALIDATE_EMAIL)){
         $email_err = "Please enter a valid email address.";
     } else{
-        //$email = $input_email;
+        $email = $input_email;
          // Prepare a select statement
         $sql = "SELECT id FROM alumni WHERE email = :email";
         
@@ -80,15 +80,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     // Validate password
-    $input_password = trim($_POST["password"]); // Corrected here
-    if(empty($input_password)){
-        $password_err = "Please enter a password.";
-    } elseif(strlen($input_password) < 6){
-        $password_err = "Password must have at least 6 characters.";
+    if(empty(trim($_POST["password"]))){
+        $password_err = "Please enter a password.";     
+    } elseif(strlen(trim($_POST["password"])) < 6){
+        $password_err = "Password must have atleast 6 characters.";
     } else{
-        $password = $input_password;
+        $password = trim($_POST["password"]);
     }
-
+    
     // Validate confirm password
     if(empty(trim($_POST["confirm_password"]))){
         $confirm_password_err = "Please confirm password.";     
@@ -102,7 +101,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($last_name_err) && empty($first_name_err) && empty($middle_name_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO alumni (last_name, first_name, middle_name, email, password,) VALUES (:last_name, :first_name, :middle_name, :email, :password)";
+
+        $sql = "INSERT INTO alumni (last_name, first_name, middle_name, email, password) VALUES (:last_name, :first_name, :middle_name, :email, :password)";
         
         // Check if the record already exists
         $sql = "SELECT COUNT(*) FROM alumni WHERE last_name =:last_name AND first_name =:first_name AND middle_name =:middle_name AND email=:email";
@@ -123,9 +123,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
             // Attempt to execute the prepared statement
             if($stmt->execute()){
-                // Records created successfully. Redirect to landing page
-                //header("location: alumni-list.php");
-                //exit();
 
                 if ($stmt->fetchColumn() > 0) {
                     // Duplicate record found
@@ -135,29 +132,37 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     $sql = "INSERT INTO alumni (last_name, first_name, middle_name, email, password) VALUES (:last_name, :first_name, :middle_name, :email, :password)";
 
                     if ($stmt = $pdo->prepare($sql)) {
+                            // Bind variables to the prepared statement as parameters
+                            $stmt->bindParam(":last_name", $param_last_name);
+                            $stmt->bindParam(":first_name", $param_first_name);
+                            $stmt->bindParam(":middle_name", $param_middle_name);
+                            $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+                            $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
+
                         // Set parameters
                         $param_last_name = $last_name;
                         $param_first_name = $first_name;
                         $param_middle_name = $middle_name;
                         $param_email = $email;
-                        $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-
-                        // Bind variables to the prepared statement as parameters
-                        $stmt->bindParam(":last_name", $param_last_name);
-                        $stmt->bindParam(":first_name", $param_first_name);
-                        $stmt->bindParam(":middle_name", $param_middle_name);
-                        $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
-                        $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
-
+                        $param_password = password_hash($password , PASSWORD_DEFAULT); // Creates a password hash
+                    
+                    
+                    
                         // Attempt to execute the prepared statement
                         if ($stmt->execute()) {
                             // Set the form submission flag to true
                             $form_submitted = true;
-                            $last_name = $first_name = $middle_name = $email = $password = "";
+                            $last_name = $first_name = $middle_name = $email = $password = $confirm_password = ""; // Clear variables after successful insert
                         } else {
                             echo "Oops! Something went wrong. Please try again later.";
+                            // Optionally, you can output more details about the error for debugging:
+                            // print_r($stmt->errorInfo());
                         }
-                    }    
+                    } else {
+                        echo "Oops! Something went wrong with preparing the SQL statement.";
+                        // Optionally, you can output more details about the error for debugging:
+                        // print_r($pdo->errorInfo());
+                    }
                 }
 
             } else{
@@ -224,14 +229,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <span class="invalid-feedback"><?php echo $email_err;?></span>
                          </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" id="exampleInputPassword1" placeholder=" Enter password">
-                            <span class="invalid-feedback"><?php echo $password_err;?></span>
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
+                            <span class="invalid-feedback"><?php echo $password_err; ?></span>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Confirm Password</label>
-                            <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>" id="exampleInputPassword1" placeholder="Enter password again">
-                            <span class="invalid-feedback"><?php echo $confirm_password_err;?></span>
+                            <label>Confirm Password</label>
+                            <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
+                            <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
                         </div>
 
                         <input type="submit" class="btn btn-primary" value="Submit">
