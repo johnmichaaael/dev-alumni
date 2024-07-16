@@ -3,8 +3,8 @@
 require_once "./db/config.php";
  
 // Define variables and initialize with empty values
-$last_name = $first_name = $middle_name = $email = $password = "";
-$last_name_err = $first_name_err = $middle_name_err = $email_err = $password_err = "";
+$last_name = $first_name = $middle_name = $email = $password = $confirm_password = "";
+$last_name_err = $first_name_err = $middle_name_err = $email_err = $password_err = $confirm_password_err = "";
 
 $form_submitted = false;
  
@@ -63,11 +63,21 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
    } else{
        $password = $input_password;
    }
-    
+   
+   // Validate confirm password
+   if(empty(trim($_POST["confirm_password"]))){
+       $confirm_password_err = "Please confirm password.";     
+   } else{
+       $confirm_password = trim($_POST["confirm_password"]);
+       if(empty($password_err) && ($password != $confirm_password)){
+           $confirm_password_err = "Password did not match.";
+       }
+   }
+
     // Check input errors before inserting in database
-    if(empty($last_name_err) && empty($first_name_err) && empty($param_middle_name_name_err) && empty($email_err) && empty($password_err)){
+    if(empty($last_name_err) && empty($first_name_err) && empty($param_middle_name_name_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)){
         // Prepare an update statement
-        $sql = "UPDATE alumni SET last_name=:last_name, first_name=:first_name, middle_name=:middle_name, email=:email, password=:password WHERE id=:id";
+        $sql = "UPDATE alumni SET last_name=:last_name, first_name=:first_name, middle_name=:middle_name, email=:email WHERE id=:id";
  
         if($stmt = $pdo->prepare($sql)){
             
@@ -76,7 +86,6 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
             $param_first_name = $first_name;
             $param_middle_name = $middle_name;
             $param_email = $email;
-            $param_password = $password;
             $param_id = $id;
             
             // Bind variables to the prepared statement as parameters
@@ -84,7 +93,6 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
             $stmt->bindParam(":first_name", $param_first_name);
             $stmt->bindParam(":middle_name", $param_middle_name);
             $stmt->bindParam(":email", $param_email);
-            $stmt->bindParam(":password", $param_password);
             $stmt->bindParam(":id", $param_id);
 
             // Attempt to execute the prepared statement
@@ -121,6 +129,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                                 $first_name = $row["first_name"];
                                 $middle_name = $row["middle_name"];
                                 $email = $row["email"];
+                                $password = $row["password"];
 
                             } else{
                                 // URL doesn't contain valid id. Redirect to error page
@@ -242,16 +251,6 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                             <span class="invalid-feedback"><?php echo $last_name_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Last name</label>
-                            <input type="text" name="last_name" class="form-control <?php echo (!empty($last_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $last_name; ?>">
-                            <span class="invalid-feedback"><?php echo $last_name_err;?></span>
-                        </div>
-                        <div class="form-group">
-                            <label>Last name</label>
-                            <input type="text" name="last_name" class="form-control <?php echo (!empty($last_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $last_name; ?>">
-                            <span class="invalid-feedback"><?php echo $last_name_err;?></span>
-                        </div>
-                        <div class="form-group">
                             <label>First name</label>
                             <input type="text" name="first_name" class="form-control <?php echo (!empty($first_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $first_name; ?>">
                             <span class="invalid-feedback"><?php echo $first_name_err;?></span>
@@ -274,8 +273,8 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Confirm Password</label>
-                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="exampleInputPassword1" placeholder="Enter password again">
-                            <span class="invalid-feedback"><?php echo $password_err;?></span>
+                            <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>" id="exampleInputPassword1" placeholder="Enter password again">
+                            <span class="invalid-feedback"><?php echo $confirm_password_err;?></span>
                         </div>
 
                         <input type="hidden" name="id" value="<?php echo $id; ?>"/>
