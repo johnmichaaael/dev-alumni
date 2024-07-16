@@ -50,7 +50,33 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } elseif(!filter_var($input_email, FILTER_VALIDATE_EMAIL)){
         $email_err = "Please enter a valid email address.";
     } else{
-        $email = $input_email;
+        //$email = $input_email;
+         // Prepare a select statement
+        $sql = "SELECT id FROM alumni WHERE email = :email";
+        
+        if($stmt = $pdo->prepare($sql)){
+            // Bind variables to the prepared statement as parameters
+            $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+            
+            // Set parameters
+            $param_email = trim($_POST["email"]);
+            
+            // Attempt to execute the prepared statement
+            if($stmt->execute()){
+                if($stmt->rowCount() == 1){
+                    $email_err = "This email is already taken.";
+                } else{
+                    $email = trim($_POST["email"]);
+                }
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+
+            // Close statement
+            unset($stmt);
+        }   
+
+
     }
 
     // Validate password
@@ -114,14 +140,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         $param_first_name = $first_name;
                         $param_middle_name = $middle_name;
                         $param_email = $email;
-                        $param_password = $password;
+                        $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
 
                         // Bind variables to the prepared statement as parameters
                         $stmt->bindParam(":last_name", $param_last_name);
                         $stmt->bindParam(":first_name", $param_first_name);
                         $stmt->bindParam(":middle_name", $param_middle_name);
-                        $stmt->bindParam(":email", $param_email);
-                        $stmt->bindParam(":password", $param_password);
+                        $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+                        $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
 
                         // Attempt to execute the prepared statement
                         if ($stmt->execute()) {
