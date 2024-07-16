@@ -5,7 +5,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     require_once "./db/config.php";
     
     // Prepare a delete statement
-    $sql = "DELETE FROM employees WHERE id = :id";
+    $sql = "DELETE FROM alumni WHERE id = :id";
     
     if($stmt = $pdo->prepare($sql)){
         // Bind variables to the prepared statement as parameters
@@ -17,7 +17,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         // Attempt to execute the prepared statement
         if($stmt->execute()){
             // Records deleted successfully. Redirect to landing page
-            header("location: index.php");
+            header("location: alumni-list.php");
             exit();
         } else{
             echo "Oops! Something went wrong. Please try again later.";

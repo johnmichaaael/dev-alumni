@@ -7,8 +7,8 @@ $form_submitted = false;
 $duplicate_record = false;
 
 // Define variables and initialize with empty values
-$last_name = $first_name = $middle_name = $email = $password = $confirm_password"";
-$last_name_err = $first_name_err = $middle_name_err = $email_err = $password_err = $confirm_password_err "";
+$last_name = $first_name = $middle_name = $email = $password = $confirm_password = "";
+$last_name_err = $first_name_err = $middle_name_err = $email_err = $password_err = $confirm_password_err = "";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -74,7 +74,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     // Check input errors before inserting in database
-    if(empty($last_name_err) && empty($first_name_err) && empty($middle_name_err) && empty($email_err) && empty($password_err)){
+    if(empty($last_name_err) && empty($first_name_err) && empty($middle_name_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)){
         // Prepare an insert statement
         $sql = "INSERT INTO alumni (last_name, first_name, middle_name, email, password,) VALUES (:last_name, :first_name, :middle_name, :email, :password)";
         
@@ -204,8 +204,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Confirm Password</label>
-                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" id="exampleInputPassword1" placeholder="Enter password again">
-                            <span class="invalid-feedback"><?php echo $password_err;?></span>
+                            <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>" id="exampleInputPassword1" placeholder="Enter password again">
+                            <span class="invalid-feedback"><?php echo $confirm_password_err;?></span>
                         </div>
 
                         <input type="submit" class="btn btn-primary" value="Submit">
