@@ -3,6 +3,12 @@
 if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     // Include config file
     require_once "./db/config.php";
+
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedin-admin"]) && $_SESSION["loggedin-admin"] === true){
+    header("location: out-of-bounds.php");
+    exit;
+}
     
     // Prepare a select statement
     $sql = "SELECT * FROM alumni WHERE id = :id";

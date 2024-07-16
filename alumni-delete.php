@@ -1,4 +1,11 @@
 <?php
+
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedin-admin"]) && $_SESSION["loggedin-admin"] === true){
+    header("location: out-of-bounds.php");
+    exit;
+}
+
 // Process delete operation after confirmation
 if(isset($_POST["id"]) && !empty($_POST["id"])){
     // Include config file

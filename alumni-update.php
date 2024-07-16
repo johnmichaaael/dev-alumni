@@ -1,6 +1,12 @@
 <?php
 // Include config file
 require_once "./db/config.php";
+
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedin-admin"]) && $_SESSION["loggedin-admin"] === true){
+    header("location: out-of-bounds.php");
+    exit;
+}
  
 // Define variables and initialize with empty values
 $last_name = $first_name = $middle_name = $email = $password = $confirm_password = "";
