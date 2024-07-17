@@ -2,11 +2,6 @@
 // Initialize the session
 session_start();
  
-// Check if the user is logged in, if not then redirect him to login page
-if(!isset($_SESSION["loggedin-admin"]) || $_SESSION["loggedin-admin"] !== true){
-    header("location: out-of-bounds.php");
-    exit;
-}
 ?>
  
 <!DOCTYPE html>

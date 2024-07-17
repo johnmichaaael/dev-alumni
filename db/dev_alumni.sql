@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 16, 2024 at 07:40 AM
+-- Generation Time: Jul 17, 2024 at 07:04 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -33,7 +33,7 @@ CREATE TABLE `alumni` (
   `first_name` varchar(100) NOT NULL,
   `middle_name` varchar(100) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -41,9 +41,8 @@ CREATE TABLE `alumni` (
 --
 
 INSERT INTO `alumni` (`id`, `last_name`, `first_name`, `middle_name`, `email`, `password`) VALUES
-(1, 'asd', 'asd', 'asd', 'asda1@asd.com', '$2y$10$ko3GprZGH2PaCDSS4yYPSO5wb/ysPovuYLkW03uFrha'),
-(2, 'hehe', 'hehe', 'hehe', 'hehe@email.com', '$2y$10$1h6aizTnLGavIlfRfwK8Mu/41lrJWTfTVqTwkbESkAy'),
-(3, 'Gumaga', 'John Michael', 'M', 'hahaha@email.com', '$2y$10$5v4oC8Z/mYFOdqv4yvEa7.B4V4yeH2gP0Say/4prQXe');
+(1, 'admin', 'admin', 'admin', 'admin@email.com', '$2y$10$PFIAryJ2wimIV.Ryi42vlutweHBjeoK6IZDkUv.jjE3OZIjEmz8MK'),
+(2, 'Gumaga', 'John Michael', 'M', 'nvrmnd1991@gmail.com', '$2y$10$XrMVoTBsOS7cOoQzwkgQFOHhm3/qLggGY6wuDWt5zc3yQVNVNe27a');
 
 -- --------------------------------------------------------
 
@@ -90,7 +89,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `alumni`
 --
 ALTER TABLE `alumni`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
