@@ -2,12 +2,6 @@
 // Include config file
 require_once "./db/config.php";
 
-// Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin-admin"]) && $_SESSION["loggedin-admin"] === true){
-    header("location: out-of-bounds.php");
-    exit;
-}
-
 // Flag to check if the form was submitted successfully
 $form_submitted = false;
 $duplicate_record = false;

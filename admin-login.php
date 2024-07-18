@@ -2,12 +2,6 @@
 // Initialize the session
 session_start();
  
-// Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin-admin"]) && $_SESSION["loggedin-admin"] === true){
-    header("location: out-of-bounds.php");
-    exit;
-}
- 
 // Include config file
 require_once "./db/config.php";
  
