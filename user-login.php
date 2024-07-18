@@ -35,11 +35,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($email_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, email, password FROM alumni WHERE email = :email";
+        $sql = "SELECT id, email, first_name , password FROM alumni WHERE email = :email";
         
         if($stmt = $pdo->prepare($sql)){
+            
             // Bind variables to the prepared statement as parameters
             $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+         
             
             // Set parameters
             $param_email = trim($_POST["email"]);
@@ -49,9 +51,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if email exists, if yes then verify password
                 if($stmt->rowCount() == 1){
                     if($row = $stmt->fetch()){
+
                         $id = $row["id"];
                         $email = $row["email"];
+                        $first_name = $row["first_name"];
                         $hashed_password = $row["password"];
+
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
                             session_start();
@@ -59,6 +64,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
+                            $_SESSION["first_name"] = $first_name;
                             $_SESSION["email"] = $email;                            
                             
                             // Redirect user to welcome page
